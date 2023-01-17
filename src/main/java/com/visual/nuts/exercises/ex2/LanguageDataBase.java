@@ -82,16 +82,16 @@ public class LanguageDataBase {
     }
 
     public List<String> getMostCommonOfficialLanguages(){
-        Map<String, Long> languageToCount = countryToLanguagesList.stream()
+        Map<String, Long> languageToCountMap = countryToLanguagesList.stream()
                 .map(CountryToLanguages::getLanguages)
                 .flatMap(Collection::stream)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-        Long mostCommonLanguageCount = Collections.max(languageToCount.entrySet(), Map.Entry.comparingByValue()).getValue();
+        Long mostCommonLanguageCount = Collections.max(languageToCountMap.entrySet(), Map.Entry.comparingByValue()).getValue();
 
-        List<String> mostCommonLanguages = languageToCount.entrySet()
+        List<String> mostCommonLanguages = languageToCountMap.entrySet()
                 .stream()
-                .filter(e -> e.getValue().equals(mostCommonLanguageCount))
+                .filter(languageToCount -> languageToCount.getValue().equals(mostCommonLanguageCount))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
 
